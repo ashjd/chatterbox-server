@@ -14,18 +14,23 @@ var requestHandler = function(request, response) {
       response.writeHead(201, headers);
       response.end(JSON.stringify(data));
     });
-  }
+  } 
 
-  if (request.method === 'GET') {
+  if (request.method === 'GET' && request.url === '/classes/messages' ) {
     //console.log ('request method was - ', request.method);
     var statusCode = 200;
     response.writeHead(statusCode, headers);
     response.end(JSON.stringify(data));
   }
+
+  if (request.url !== '/classes/messages') {
+    response.writeHead(404, headers);
+    response.end(JSON.stringify(data));
+  }
+  
 //  console.log('Serving request type ' + request.method + ' for url ' + request.url);
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = 'text/plain';
-
 };
 
 var defaultCorsHeaders = {
