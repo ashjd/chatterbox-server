@@ -28,21 +28,11 @@ var requestHandler = function(request, response) {
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
 
-  // if (request.url === '/classes/messages') {
-  //   console.log('classes endpoint');
-  //   response.end('found an endpoint!!!!!!!!!!!!!!!!!!');
-  // }
-
-  // if (request.url === '/classes/room' && request.type === 'POST') {
-  //   console.log('rooms endpoint');
-  //   response.end('found an endpoint!!!!!!!!!!!!!!!!');
-  // }
-
 
   if (request.method === 'POST' && request.url === '/classes/messages') {
-    //console.log ('request method was @@@@@@@@@@@@@@@@@@@@@', request.method);
-    request.on('data', function(item) {
-      console.log (item);
+
+    request.on('data', function(data) {
+      console.log (data.results);
     });
     response.end();
   }
