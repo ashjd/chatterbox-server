@@ -11,7 +11,7 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-
+var http = require('http');
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -27,6 +27,31 @@ var requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
+
+  // if (request.url === '/classes/messages') {
+  //   console.log('classes endpoint');
+  //   response.end('found an endpoint!!!!!!!!!!!!!!!!!!');
+  // }
+
+  // if (request.url === '/classes/room' && request.type === 'POST') {
+  //   console.log('rooms endpoint');
+  //   response.end('found an endpoint!!!!!!!!!!!!!!!!');
+  // }
+
+
+  if (request.method === 'POST' && request.url === '/classes/messages') {
+    //console.log ('request method was @@@@@@@@@@@@@@@@@@@@@', request.method);
+    request.on('data', function(item) {
+      console.log (item);
+    });
+    response.end();
+  }
+
+  if (request.method === 'GET') {
+    console.log ('request method was - ', request.method);
+  }
+
+
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   // The outgoing status.
@@ -52,7 +77,15 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+ 
+  var message = {
+    username: 'test',
+    text: 'test',
+    roomname: 'test',
+    results: []
+  };
+
+  response.end(JSON.stringify(message));
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
@@ -71,3 +104,4 @@ var defaultCorsHeaders = {
   'access-control-max-age': 10 // Seconds.
 };
 
+module.exports.requestHandler = requestHandler;
