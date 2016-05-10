@@ -1,6 +1,6 @@
 /* Import node's http module: */
 var http = require('http');
-var handleRequest = require('./request-handler');
+var handler = require('./request-handler');
 
 // Every server needs to listen on a port with a unique number. The
 // standard port for HTTP servers is port 80, but that port is
@@ -22,7 +22,7 @@ const ip = '127.0.0.1';
 // incoming requests.
 //
 // After creating the server, we will tell it to listen on the given port and IP. */
-var server = http.createServer(handleRequest.requestHandler);
+var server = http.createServer(handler.requestHandler);
 console.log('basic server.js Listening on http://' + ip + ':' + port);
 server.listen(port, ip);
 
