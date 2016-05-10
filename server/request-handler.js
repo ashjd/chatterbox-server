@@ -1,32 +1,28 @@
 
 var http = require('http');
+var data = {results: []};
 
 var requestHandler = function(request, response) {
  
-  var data = { results: []};
-  
   if (request.method === 'POST' && request.url === '/classes/messages') {
-
     var messageData = '';
-    request.on('data', function(chunk) {
+    request.on('data', (chunk) => {
       messageData += chunk;
     });
-    request.on('end', function() {
-      data.results.push(messageData);
+    request.on('end', () => {
+      data.results.push(JSON.parse(messageData));
       response.writeHead(201, headers);
       response.end(JSON.stringify(data));
     });
   }
 
   if (request.method === 'GET') {
-    console.log ('request method was - ', request.method);
+    //console.log ('request method was - ', request.method);
     var statusCode = 200;
     response.writeHead(statusCode, headers);
     response.end(JSON.stringify(data));
   }
-
-  console.log('Serving request type ' + request.method + ' for url ' + request.url);
-
+//  console.log('Serving request type ' + request.method + ' for url ' + request.url);
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = 'text/plain';
 
