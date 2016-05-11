@@ -1,9 +1,14 @@
 
 var http = require('http');
 var data = {results: []};
+var ip = 'http://127.0.0.1:3000';
 
 var requestHandler = function(request, response) {
- 
+  var headers = defaultCorsHeaders;
+  console.log(request.url);
+  headers['Content-Type'] = 'application/json';
+  var statusCode = 200;
+
   if (request.method === 'POST' && request.url === '/classes/messages') {
     var messageData = '';
     request.on('data', (chunk) => {
@@ -11,26 +16,24 @@ var requestHandler = function(request, response) {
     });
     request.on('end', () => {
       data.results.push(JSON.parse(messageData));
-      response.writeHead(201, headers);
-      response.end(JSON.stringify(data));
     });
+    statusCode = 201;
   } 
 
-  if (request.method === 'GET' && request.url === '/classes/messages' ) {
-    //console.log ('request method was - ', request.method);
-    var statusCode = 200;
-    response.writeHead(statusCode, headers);
-    response.end(JSON.stringify(data));
+  if (request.method === 'GET') {
+    if (request.url === '/classes/messages') {
+      statusCode = 200;
+    } else if (request.url === '/') {
+      statusCode = 200;
+    } else {
+      statusCode = 404;
+    }
   }
 
-  if (request.url !== '/classes/messages') {
-    response.writeHead(404, headers);
-    response.end(JSON.stringify(data));
-  }
+  response.writeHead(statusCode, headers);
+  response.end(JSON.stringify(data));
   
-//  console.log('Serving request type ' + request.method + ' for url ' + request.url);
-  var headers = defaultCorsHeaders;
-  headers['Content-Type'] = 'text/plain';
+  console.log('Serving request type ' + request.method + ' for url ' + request.url);
 };
 
 var defaultCorsHeaders = {
